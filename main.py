@@ -12,10 +12,19 @@ print("OpenAI API Key loaded successfully")
 openai_client = OpenAI(api_key=openai_api_key)
 print("OpenAI client configured")
 
+explanation_levels = {
+    1: "like I'm 5 years old",
+    2: "like I'm 10 years old",
+    3: "like a high school student",
+    4: "like a college student",
+    5: "like an expert in the field",
+}
+
+
 #Create the main function which will behvave as the tutor
 #Using openAI api
 # Let's create a new function that streams the response
-def stream_ai_tutor_response(user_question):
+def stream_ai_tutor_response(user_question,explanation_level_value):
     """
     Sends a question to the OpenAI API and streams the response as a generator.
 
@@ -25,8 +34,9 @@ def stream_ai_tutor_response(user_question):
     Yields:
         str: Chunks of the AI's response.
     """
+    level_description = explanation_levels.get(explanation_level_value, "like a high school student")  # Default to intermediate level
 
-    system_prompt = "You are a helpful and patient AI Tutor. Explain concepts clearly and concisely."
+    system_prompt = "You are a helpful and patient AI Tutor. Explain concepts clearly and concisely, depending on the selected explanation level. For this question, explain it " + level_description + "."
 
     try:
         
@@ -99,9 +109,18 @@ def stream_ai_tutor_response(user_question):
 #gr.Interface(fn=get_ai_tutor_response, inputs="text", outputs="text", title="Adaptive AI Tutor").launch()
 ai_tutor_interface = gr.Interface(
 fn=stream_ai_tutor_response,
-inputs=gr.Textbox(lines=2,placeholder="Ask the AI Tutor Anything!", label ="Your Question"),
+inputs=[
+    gr.Textbox(lines=2,placeholder="Ask the AI Tutor Anything!", label ="Your Question"),
+    gr.Slider(
+        minimum=1,
+        maximum=5,
+        step=1,
+        value=3,#deafult levl
+        label="Explanation Level (1=Simple, 5=Detailed)"
+    )
+],
 outputs=gr.Markdown(label="AI Tutor Response", container=True, height =250),
-title = "Simple AI Tutor",
+title = "🎓 Simple AI Tutor",
 description = "Ask the AI Tutor any question and get a clear and concise response!"
 )
 
