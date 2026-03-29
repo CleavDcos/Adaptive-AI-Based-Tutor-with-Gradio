@@ -1,0 +1,4 @@
+What happens above is that, when response arrives, ie in a stream, we take chunks of that stream
+then we extract the text cotent from the chunk and add it to full response, note that its chunks here, andn not the entire answer at once 
+full response then sends these chunks of message to gradio (using yield), and in real time, since obv not entire message is coming, but chunks,
+it appears as if the ai is typing the response in real time, which is a much better user experience than waiting for the entire response to arrive at once
