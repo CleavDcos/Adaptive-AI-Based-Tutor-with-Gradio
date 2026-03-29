@@ -43,7 +43,21 @@ def get_ai_tutor_response(user_question):
         print(f"Error calling OpenAI API: {e}")
         return "Sorry, I couldn't process your question at the moment. Please try again later."
     
-test_question = "explain concept of gravity"
-print(f"asking test question: {test_question}  ")
-test_response = get_ai_tutor_response(test_question)
-print(f"AI Tutor response: {test_response}")
+#test_question = "explain concept of gravity"
+#print(f"asking test question: {test_question}  ")
+#test_response = get_ai_tutor_response(test_question)
+#print(f"AI Tutor response: {test_response}")
+
+
+#Build interface using Gradio
+#gr.Interface(fn=get_ai_tutor_response, inputs="text", outputs="text", title="Adaptive AI Tutor").launch()
+ai_tutor_interface_simple = gr.Interface(
+fn=get_ai_tutor_response,
+inputs=gr.Textbox(lines=2,placeholder="Ask the AI Tutor Anything!", label ="Your Question"),
+outputs=gr.Textbox(label="AI Tutor Response"),
+title = "Simple AI Tutor",
+description = "Ask the AI Tutor any question and get a clear and concise response!"
+)
+
+print("Launching Gradio interface...")
+ai_tutor_interface_simple.launch()
